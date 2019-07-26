@@ -115,7 +115,9 @@ extension _CloudKitRecordDecoder.KeyedContainer: KeyedDecodingContainerProtocol 
     func decode<T>(_ type: T.Type, forKey key: Key) throws -> T where T : Decodable {
         try checkCanDecodeValue(forKey: key)
 
+        #if DEBUG
         print("decode key: \(key.stringValue)")
+        #endif
 
         if key.stringValue == _CKSystemFieldsKeyName {
             return systemFieldsData as! T

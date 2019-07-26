@@ -12,7 +12,7 @@ let package = Package(
             targets: ["CloudKitCodable"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/eyvallah/OpenCloudKit.git", from: "0.6.6"),
+        .package(url: "https://github.com/eyvallah/OpenCloudKit.git", from: "0.6.7"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.

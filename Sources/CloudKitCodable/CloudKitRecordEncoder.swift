@@ -193,7 +193,7 @@ extension _CloudKitRecordEncoder.KeyedContainer: KeyedEncodingContainerProtocol 
     }
 
     private func prepareMetaRecord(with systemFields: Data) {
-        let coder = NSKeyedUnarchiver(forReadingWith: systemFields)
+        guard let coder = try? NSKeyedUnarchiver(forReadingFrom: systemFields) else { return }
         coder.requiresSecureCoding = true
         metaRecord = CKRecord(coder: coder)
         coder.finishDecoding()

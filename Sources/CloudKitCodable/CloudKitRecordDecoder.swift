@@ -98,6 +98,7 @@ extension _CloudKitRecordDecoder.KeyedContainer: KeyedDecodingContainerProtocol 
 
     func contains(_ key: Key) -> Bool {
         guard key.stringValue != _CKSystemFieldsKeyName else { return true }
+        guard key.stringValue != _CKIdentifierKeyName else { return true }
 
         return allKeys.contains(where: { $0.stringValue == key.stringValue })
     }
@@ -107,6 +108,8 @@ extension _CloudKitRecordDecoder.KeyedContainer: KeyedDecodingContainerProtocol 
 
         if key.stringValue == _CKSystemFieldsKeyName {
             return systemFieldsData.count == 0
+        } else if key.stringValue == _CKIdentifierKeyName {
+            return false
         } else {
             return record[key.stringValue] == nil
         }

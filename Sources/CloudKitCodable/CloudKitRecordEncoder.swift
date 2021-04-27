@@ -123,7 +123,7 @@ extension _CloudKitRecordEncoder: Encoder {
     }
 }
 
-protocol CloudKitRecordEncodingContainer: class {
+protocol CloudKitRecordEncodingContainer: AnyObject {
     var record: CKRecord? { get }
 }
 

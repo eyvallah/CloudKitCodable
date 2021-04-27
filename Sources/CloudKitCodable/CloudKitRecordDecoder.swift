@@ -54,7 +54,7 @@ extension _CloudKitRecordDecoder: Decoder {
     }
 }
 
-protocol CloudKitRecordDecodingContainer: class {
+protocol CloudKitRecordDecodingContainer: AnyObject {
     var codingPath: [CodingKey] { get set }
 
     var userInfo: [CodingUserInfoKey : Any] { get }

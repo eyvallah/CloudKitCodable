@@ -13,7 +13,7 @@ let package = Package(
             targets: ["CloudKitCodable"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/levinli303/OpenCloudKit.git", from: "0.7.11"),
+        .package(url: "https://github.com/levinli303/OpenCloudKit.git", from: "0.7.14"),
     ],
     targets: [
         .target(

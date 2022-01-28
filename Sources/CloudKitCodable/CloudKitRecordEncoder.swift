@@ -173,7 +173,12 @@ extension _CloudKitRecordEncoder.KeyedContainer: KeyedEncodingContainerProtocol 
     }
 
     private func produceCloudKitValue<T>(for value: T, withKey key: Key) throws -> CKRecordValue where T : Encodable {
-        if let urlValue = value as? URL {
+        if let urlsValue = value as? [URL] {
+            guard let cloudKitValue = produceCloudKitValue(for: urlsValue) else {
+                throw CloudKitRecordEncodingError.unsupportedValueForKey(key.stringValue)
+            }
+            return cloudKitValue
+        } else if let urlValue = value as? URL {
             return produceCloudKitValue(for: urlValue)
         } else if value is CustomCloudKitEncodable {
             throw CloudKitRecordEncodingError.referencesNotSupported(key.stringValue)
@@ -205,6 +210,28 @@ extension _CloudKitRecordEncoder.KeyedContainer: KeyedEncodingContainerProtocol 
         } else {
             return url.absoluteString as CKRecordValue
         }
+    }
+
+    private func produceCloudKitValue(for urls: [URL]) -> CKRecordValue? {
+        var assets = [CKAsset]()
+        var strs = [String]()
+        for url in urls {
+            let value = produceCloudKitValue(for: url)
+            if let v = value as? CKAsset {
+                assets.append(v)
+            } else if let v = value as? String {
+                strs.append(v)
+            } else {
+                return nil
+            }
+        }
+        if assets.count > 0 && strs.count > 0 {
+            // Mixed value is not allowed
+            return nil
+        } else if strs.count > 0 {
+            return assets
+        }
+        return assets
     }
 
     func nestedUnkeyedContainer(forKey key: Key) -> UnkeyedEncodingContainer {

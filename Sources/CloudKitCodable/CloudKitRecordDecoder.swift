@@ -140,6 +140,11 @@ extension _CloudKitRecordDecoder.KeyedContainer: KeyedDecodingContainerProtocol 
             return try decodeURL(forKey: key) as! T
         }
 
+        // URLs are encoded as [String] (remote) or [CKAsset] (file URL) in CloudKit
+        if type == [URL].self {
+            return try decodeURLs(forKey: key) as! T
+        }
+
         guard let value = record[key.stringValue] as? T else {
             let context = DecodingError.Context(codingPath: codingPath, debugDescription: "CKRecordValue couldn't be converted to \(String(describing: type))'")
             throw DecodingError.typeMismatch(type, context)
@@ -164,6 +169,29 @@ extension _CloudKitRecordDecoder.KeyedContainer: KeyedDecodingContainerProtocol 
         }
 
         return url
+    }
+
+    private func decodeURLs(forKey key: Key) throws -> [URL] {
+        if let assets = record[key.stringValue] as? [CKAsset] {
+            return assets.map{ decodeURL(from: $0) }
+        }
+
+        guard let strs = record[key.stringValue] as? [String] else {
+            let context = DecodingError.Context(codingPath: codingPath, debugDescription: "URLs should have been encoded as [String] in CKRecord")
+            throw DecodingError.typeMismatch(URL.self, context)
+        }
+
+        var urls = [URL]()
+        for str in strs {
+            guard let url = URL(string: str) else {
+                let context = DecodingError.Context(codingPath: codingPath, debugDescription: "The string \(str) is not a valid URL")
+                throw DecodingError.typeMismatch(URL.self, context)
+            }
+
+            urls.append(url)
+        }
+
+        return urls
     }
 
     private func decodeURL(from asset: CKAsset) -> URL {

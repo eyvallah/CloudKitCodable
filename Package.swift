@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "CloudKitCodable",
     platforms: [
-        .macOS(.v10_15)
+        .macOS("12.0")
     ],
     products: [
         .library(
@@ -13,7 +13,7 @@ let package = Package(
             targets: ["CloudKitCodable"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/levinli303/OpenCloudKit.git", from: "0.7.14"),
+        .package(url: "https://github.com/levinli303/OpenCloudKit.git", .revision("a882fe8a5e3557dc39e90a84e7599d8b5768ceb8")),
     ],
     targets: [
         .target(

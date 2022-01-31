@@ -91,7 +91,7 @@ extension _CloudKitRecordEncoder: Encoder {
     var record: CKRecord {
         if let existingRecord = container?.record { return existingRecord }
 
-        let zid = zoneID ?? CKRecordZoneID(zoneName: CKRecordZoneDefaultName, ownerName: CKCurrentUserDefaultName)
+        let zid = zoneID ?? .default
         let rid = CKRecordID(recordName: recordName, zoneID: zid)
 
         return CKRecord(recordType: recordTypeName, recordID: rid)
@@ -254,7 +254,7 @@ extension _CloudKitRecordEncoder.KeyedContainer: KeyedEncodingContainerProtocol 
 extension _CloudKitRecordEncoder.KeyedContainer: CloudKitRecordEncodingContainer {
 
     var recordID: CKRecordID {
-        let zid = zoneID ?? CKRecordZoneID(zoneName: CKRecordZoneDefaultName, ownerName: CKCurrentUserDefaultName)
+        let zid = zoneID ?? .default
         return CKRecordID(recordName: recordName, zoneID: zid)
     }
 
